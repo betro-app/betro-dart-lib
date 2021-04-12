@@ -1,6 +1,9 @@
 # betro_dart_lib
 
-A new flutter plugin project.
+[![Build Status](https://github.com/prijindal/betro-dart-lib/actions/workflows/nodejs-test.yml/badge.svg)](https://github.com/prijindal/betro-dart-lib/actions/workflows/nodejs-test.yml)
+[![codecov](https://codecov.io/gh/prijindal/betro-dart-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/prijindal/betro-dart-lib)
+[![CodeQL Analysis](https://github.com/prijindal/betro-dart-lib/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/prijindal/betro-dart-lib/actions/workflows/codeql-analysis.yml)
+
 
 ## Getting Started
 
