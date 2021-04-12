@@ -68,23 +68,6 @@ class RsaKeyHelper {
     return rsaPublicKey;
   }
 
-  /// Sign plain text with Private Key
-  ///
-  /// Given a plain text [String] and a [RSAPrivateKey], decrypt the text using
-  /// a [RSAEngine] cipher
-  String sign(String plainText, RSAPrivateKey privateKey) {
-    var signer = RSASigner(SHA256Digest(), "0609608648016503040201");
-    signer.init(true, PrivateKeyParameter<RSAPrivateKey>(privateKey));
-    return base64Encode(
-        signer.generateSignature(createUint8ListFromString(plainText)).bytes);
-  }
-
-  /// Creates a [Uint8List] from a string to be signed
-  Uint8List createUint8ListFromString(String s) {
-    var codec = Utf8Codec(allowMalformed: true);
-    return Uint8List.fromList(codec.encode(s));
-  }
-
   /// Decode Private key from PEM Format
   ///
   /// Given a base64 encoded PEM [String] with correct headers and footers, return a
@@ -125,52 +108,7 @@ class RsaKeyHelper {
   }
 
   Uint8List decodePEM(String pem) {
-    return base64.decode(removePemHeaderAndFooter(pem));
-  }
-
-  String removePemHeaderAndFooter(String pem) {
-    var startsWith = [
-      "-----BEGIN PUBLIC KEY-----",
-      "-----BEGIN RSA PRIVATE KEY-----",
-      "-----BEGIN RSA PUBLIC KEY-----",
-      "-----BEGIN PRIVATE KEY-----",
-      "-----BEGIN PGP PUBLIC KEY BLOCK-----\r\nVersion: React-Native-OpenPGP.js 0.1\r\nComment: http://openpgpjs.org\r\n\r\n",
-      "-----BEGIN PGP PRIVATE KEY BLOCK-----\r\nVersion: React-Native-OpenPGP.js 0.1\r\nComment: http://openpgpjs.org\r\n\r\n",
-    ];
-    var endsWith = [
-      "-----END PUBLIC KEY-----",
-      "-----END PRIVATE KEY-----",
-      "-----END RSA PRIVATE KEY-----",
-      "-----END RSA PUBLIC KEY-----",
-      "-----END PGP PUBLIC KEY BLOCK-----",
-      "-----END PGP PRIVATE KEY BLOCK-----",
-    ];
-    bool isOpenPgp = pem.indexOf('BEGIN PGP') != -1;
-
-    pem = pem.replaceAll(' ', '');
-    pem = pem.replaceAll('\n', '');
-    pem = pem.replaceAll('\r', '');
-
-    for (var s in startsWith) {
-      s = s.replaceAll(' ', '');
-      if (pem.startsWith(s)) {
-        pem = pem.substring(s.length);
-      }
-    }
-
-    for (var s in endsWith) {
-      s = s.replaceAll(' ', '');
-      if (pem.endsWith(s)) {
-        pem = pem.substring(0, pem.length - s.length);
-      }
-    }
-
-    if (isOpenPgp) {
-      var index = pem.indexOf('\r\n');
-      pem = pem.substring(0, index);
-    }
-
-    return pem;
+    return base64.decode(pem);
   }
 
   /// Encode Private key to PEM Format
