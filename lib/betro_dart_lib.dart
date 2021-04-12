@@ -6,10 +6,14 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+export "aes.dart";
+export "get_key.dart";
+export "master_hash.dart";
+export "rsa.dart";
+export "sym.dart";
 
 class BetroDartLib {
-  static const MethodChannel _channel =
-      const MethodChannel('betro_dart_lib');
+  static const MethodChannel _channel = const MethodChannel('betro_dart_lib');
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');

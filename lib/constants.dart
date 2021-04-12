@@ -1,0 +1,2 @@
+const ITERATIONS = 10000;
+const HASH_LENGTH = 256;
