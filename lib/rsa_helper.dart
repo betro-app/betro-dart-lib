@@ -3,20 +3,10 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import "package:asn1lib/asn1lib.dart";
-import 'package:flutter/foundation.dart';
 import 'package:pointycastle/export.dart';
 
 /// Helper class to handle RSA key generation, encoding, decoding, encrypting & decrypting strings
 class RsaKeyHelper {
-  /// Generate a [PublicKey] and [PrivateKey] pair
-  ///
-  /// Returns a [AsymmetricKeyPair] based on the [RSAKeyGenerator] with custom parameters,
-  /// including a [SecureRandom]
-  Future<AsymmetricKeyPair<PublicKey, PrivateKey>> computeRSAKeyPair(
-      SecureRandom secureRandom) async {
-    return await compute(getRsaKeyPair, secureRandom);
-  }
-
   /// Generates a [SecureRandom] to use in computing RSA key pair
   ///
   /// Returns [FortunaRandom] to be used in the [AsymmetricKeyPair] generation
