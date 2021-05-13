@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:cryptography/cryptography.dart';
+import 'package:pinenacl/api.dart';
+import 'package:pinenacl/src/authenticated_encryption/public.dart';
 import 'get_key.dart';
 
 class EcPair {
@@ -9,25 +10,16 @@ class EcPair {
 }
 
 Future<EcPair> generateExchangePair() async {
-  final algorithm = Cryptography.instance.x25519();
-  final keyPair = await algorithm.newKeyPair();
-
-  final publicKey = base64Encode((await keyPair.extractPublicKey()).bytes);
-
-  final privateKey = base64Encode(await keyPair.extractPrivateKeyBytes());
-
+  final private_key = PrivateKey.generate();
+  final publicKey = base64Encode(private_key.publicKey.toList());
+  final privateKey = base64Encode(private_key.toList());
   return EcPair(publicKey, privateKey);
 }
 
 Future<String> deriveExchangeSymKey(
     String public_key, String private_key) async {
-  final publicKey =
-      SimplePublicKey(base64Decode(public_key), type: KeyPairType.x25519);
-  final privateKey = base64Decode(private_key);
-  final algorithm = Cryptography.instance.x25519();
-  // algorithm.keyPairType;
-  final keyPair = await algorithm.newKeyPairFromSeed(privateKey);
-  final secretKey = await algorithm.sharedSecretKey(
-      keyPair: keyPair, remotePublicKey: publicKey);
-  return getEncryptionKeys(base64Encode(await secretKey.extractBytes()));
+  final privateKey = PrivateKey(base64Decode(private_key));
+  final publicKey = PublicKey(base64Decode(public_key));
+  final box = Box(myPrivateKey: privateKey, theirPublicKey: publicKey);
+  return getEncryptionKeys(base64Encode(box.buffer.asUint8List()));
 }

@@ -90,7 +90,6 @@ void main() {
   });
 
   test("x25519 keys", () async {
-    // TODO: No implementation in web crypto for x25519
     final ecPair1 = await generateExchangePair();
     final ecPair2 = await generateExchangePair();
     final derivedKey1 =

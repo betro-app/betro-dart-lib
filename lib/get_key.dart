@@ -31,13 +31,11 @@ Future<String> getEncryptionKeys(String master_key) async {
     nonce: nonce,
     info: Utf8Encoder().convert("enc"),
   );
-  // final encryptionKey_base64 = base64Encode(await encryptionKey.extractBytes());
   final encryptionMac = await algorithm.deriveKey(
     secretKey: secretKey,
     nonce: nonce,
     info: Utf8Encoder().convert("mac"),
   );
-  // final encryptionMac_base64 = base64Encode(await encryptionMac.extractBytes());
   List<int> buf = [];
   buf.addAll(await encryptionKey.extractBytes());
   buf.addAll(await encryptionMac.extractBytes());
