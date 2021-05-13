@@ -73,6 +73,7 @@ void main() {
   });
 
   test("Rsa decryption", () async {
+    // TODO: No implementation in dart for RSA-OAEP
     const publicKey =
         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2fXAg8OJ0WLzsSDf5ZMaVfo+6SFp+FgWx5W9/zT/dI0m1pxS4rTNEcmX5tS8GOikpKQku9WT6A5ugeR+UMeGXIwmLnggDx0TjhgqcrqWSk8X9FGVw8t6D7WORMexP6LLduhKNVCmBrQlcD/HonsbI+9KU2aMMB6QJ31Kgrw1+vi/hoTKWC9sc0vhBqiz+ZGI/Z6FhMaXHn7khRPM/+gHkL6/pt1U9q9uZ9sjwYsxkojQa6TEH8Pywyfg++aLC08/tvJUHrILYWw0A19Wtkw2nj8lQqwXUP+ovBX4X7nwivN8xAzZ/p5aqAisZlSxhyfXUj0quDdL/LeHpV+5OaLyjQIDAQAB";
     final privateKey =
@@ -86,5 +87,20 @@ void main() {
     expect(Utf8Decoder().convert(rsaDecrypted), originalText);
     // final rsaDecryptedJs = await rsaDecrypt(privateKey, rsaEncryptedFromjs);
     // expect(Utf8Decoder().convert(rsaDecryptedJs), originalText);
+  });
+
+  test("x25519 keys", () async {
+    // TODO: No implementation in web crypto for x25519
+    final ecPair1 = await generateExchangePair();
+    final ecPair2 = await generateExchangePair();
+    final derivedKey1 =
+        await deriveExchangeSymKey(ecPair1.publicKey, ecPair2.privateKey);
+    final derivedKey2 =
+        await deriveExchangeSymKey(ecPair2.publicKey, ecPair1.privateKey);
+    expect(derivedKey1, derivedKey2);
+    final encrypted =
+        await symEncrypt(derivedKey1, Utf8Encoder().convert(originalText));
+    final decrypted = await symDecrypt(derivedKey2, encrypted);
+    expect(Utf8Decoder().convert(decrypted), originalText);
   });
 }

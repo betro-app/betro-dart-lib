@@ -9,3 +9,5 @@ build/
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+
+test/generateExample.json

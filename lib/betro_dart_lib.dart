@@ -5,5 +5,6 @@
 
 export "get_key.dart";
 export "master_hash.dart";
+export "ecdh.dart";
 export "rsa.dart";
 export "sym.dart";
