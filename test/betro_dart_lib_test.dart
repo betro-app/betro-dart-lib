@@ -13,12 +13,10 @@ void main() {
 
   test("Encryption Keys", () async {
     final master_key = await getMasterKey("user@example.com", "123456");
-    final encryptionKeys = await getEncryptionKeys(master_key);
+    final encryptionKey = await getEncryptionKeys(master_key);
 
-    final encryptionKey = encryptionKeys.encryptionKey;
-    final encryptionMac = encryptionKeys.encryptionMac;
-    expect(encryptionKey, "s1YlR3RY/vR1jlx4mbxhGUvtMDxN30iMzOzFRXlGzpY=");
-    expect(encryptionMac, "qtu7PgAC4yB2hdvmQLzaw0a7IpHoMIvTXHuhBxKmtw8=");
+    expect(encryptionKey,
+        "s1YlR3RY/vR1jlx4mbxhGUvtMDxN30iMzOzFRXlGzpaq27s+AALjIHaF2+ZAvNrDRrsikegwi9Nce6EHEqa3Dw==");
   });
 
   test("Master hash", () async {
@@ -29,20 +27,17 @@ void main() {
 
   test("Aes encryption", () async {
     final master_key = await getMasterKey("user@example.com", "123456");
-    final encryptionKeys = await getEncryptionKeys(master_key);
+    final encryptionKey = await getEncryptionKeys(master_key);
 
-    final encryptionKey = encryptionKeys.encryptionKey;
-    final encryptionMac = encryptionKeys.encryptionMac;
+    final encrypted =
+        await symEncrypt(encryptionKey, Utf8Encoder().convert(originalText));
 
-    final encrypted = await aesEncrypt(
-        encryptionKey, encryptionMac, Utf8Encoder().convert(originalText));
-
-    final decrypted = await aesDecrypt(encryptionKey, encryptionMac, encrypted);
+    final decrypted = await symDecrypt(encryptionKey, encrypted);
     expect(decrypted, Utf8Encoder().convert(originalText));
 
     expect(
-      await aesDecrypt(encryptionKey, encryptionMac,
-          "yWddnLg/ErUkIxVvJ4cx/hjFwEtezipk+VM8IfVuhIiaU9EZxMusfmsNslqC4jLn65NzHSublXsfmATj+3JbSA=="),
+      await symDecrypt(encryptionKey,
+          "NszekqO5MJc++uLtB56aSuXcC8wCicAZsgtYgjnANzT8iMixE7RvMPvacTcIPvgfZsVW+gWhy9jXl8mNZ+30+w=="),
       Utf8Encoder().convert(originalText),
     );
   });
@@ -58,8 +53,10 @@ void main() {
   });
 
   test("Sym key decryption", () async {
-    final symKey = "aKBB9Cgw6VYa+hSGGDFCdM8tLfmLYtLzjOLah1RMaiw=";
-    final symEncrypted = "PjdYU19kzydZagXb/a0hV/3X2ONKmuJ0Vp1u6Okse3A=";
+    final symKey =
+        "E9kufbmm2Zgf/Q8dr33FOPN9DEFTI/y81NI/db0FHaKKOFPV7PcECmndNSrO3GNh5c3nwBgBsQmXO+FoUGzLMotXtAHTpxRyeYnVxz65U5d8ZEToyqvKcOCsCxQN8Q/k";
+    final symEncrypted =
+        "lLSXfg83sd1/F8Dji5N1AtME4bks7SVNm7rjKNEhG+YlV92g0Qt8D4XL4LxgByemhrDrwYn6W7NU9B8hrfNPFA==";
     final symDecrypted = await symDecrypt(symKey, symEncrypted);
     expect(symDecrypted, Utf8Encoder().convert(originalText));
   });
@@ -77,11 +74,11 @@ void main() {
 
   test("Rsa decryption", () async {
     const publicKey =
-        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsVEtAoG7CGmVud8hZnYPKZUQhHP3LjGpQI9GVRSRwyz33zcy7brRYGa5VXB4ZjIu96XhtCZo5TXzKVxdCySGtjwhCaGFt6iKE3uqsHbjfnTB4y2jrH4KIDZ/DQPj4iwxWhY7lGcn+fl9AennU3DWzuRYEes8KN3ywbJJAhy3lu090a/PAdPYWeVDGIsW4pZK4DfdqYoBxXLA66NSfD3RTuD1GEzPoAMtXBcYeJFqY4LGDuR5UVu801lpNSphYytYzIYanVp6jxwBSIGdRVppixswyvkzsNdodT9YA2c7QaZVRXoiaGvmwHbmXjreaOtPOU+q6uq/54ARtKC3ATofbsIVwiShqUwMoH9q20n1FcKooh5I8VdhNb7FhKLqVsNHn/gvX2fkc6zHjRQ0kGQJdMm3YWD1kfAARxNXT5IzCO7etxEvjp1XoKNBCMhu5K+1BZicHr9XwuslgfaqCdrXffAtBiLeblBuV7mCrhzgJsAkdeQ0a4HdX5uSSwnEl4x/ZgLg+jiPk5vKgfTxvsL0d/gqsr4NHb1i5r8u/edRfwd75Q8teXgtn6n/91CvFrrRDZzu38u+xEkhE4nTOS24O4evo9EXhQ2JMZENLwzxNniNBVheu9Nx+Z1DL2Sn1F8KhiC4RsgTij59Im1xfPWs3NKcEk61KSO/GlWGI48hgCkCAwEAAQ==";
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2fXAg8OJ0WLzsSDf5ZMaVfo+6SFp+FgWx5W9/zT/dI0m1pxS4rTNEcmX5tS8GOikpKQku9WT6A5ugeR+UMeGXIwmLnggDx0TjhgqcrqWSk8X9FGVw8t6D7WORMexP6LLduhKNVCmBrQlcD/HonsbI+9KU2aMMB6QJ31Kgrw1+vi/hoTKWC9sc0vhBqiz+ZGI/Z6FhMaXHn7khRPM/+gHkL6/pt1U9q9uZ9sjwYsxkojQa6TEH8Pywyfg++aLC08/tvJUHrILYWw0A19Wtkw2nj8lQqwXUP+ovBX4X7nwivN8xAzZ/p5aqAisZlSxhyfXUj0quDdL/LeHpV+5OaLyjQIDAQAB";
     final privateKey =
-        "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";
+        "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDZ9cCDw4nRYvOxIN/lkxpV+j7pIWn4WBbHlb3/NP90jSbWnFLitM0RyZfm1LwY6KSkpCS71ZPoDm6B5H5Qx4ZcjCYueCAPHROOGCpyupZKTxf0UZXDy3oPtY5Ex7E/ost26Eo1UKYGtCVwP8eiexsj70pTZowwHpAnfUqCvDX6+L+GhMpYL2xzS+EGqLP5kYj9noWExpcefuSFE8z/6AeQvr+m3VT2r25n2yPBizGSiNBrpMQfw/LDJ+D75osLTz+28lQesgthbDQDX1a2TDaePyVCrBdQ/6i8FfhfufCK83zEDNn+nlqoCKxmVLGHJ9dSPSq4N0v8t4elX7k5ovKNAgMBAAECgf9gNRnFD4rF4eevR9OMgmIdkVgzj4w3Eqr7bh1viPU5fRSnpljvuN7L+zARs9VTKV2DTvDn+F5REA23SCR5g5jLQRGZcWy1PyBimEgkXDf6lO796QUyZ555UKp7samLbVBiLCaVYgPm8Z2U7pIwJibUtcsZBSrcEqGOzL8W9fzdyh36sFp64PZawJmbdc1SUAL7hVQr0QPGDGcuG/7PDB55Hpu5oH31xojsVUQlCR8Ll6ovUdl0XaQKsTM961vJKcYVDZ9WI762j9qB+y5HdwGW25T51PEGkBqge0/zYcxo/8ac7wb1iRl6G3hZt2BZwI52PZQlAuZn+PB6CQYTkr0CgYEA98TAAQxfzApcKjq/yBVw/0tsSNyBHKxflgIqpmQycgVPn/f0fEyR7e+9C+RtYZ/kyWTasQoHGieIP4QF/j0YI7N1LaMPn/bvb7WtPyH8Br6kCvSgypxe8V/XlFfqQVizbvan/H8w2/mF80zudouLJwWIexBC7jsoa6O2qFSmobsCgYEA4TN7iXrcN6tIK8mCDBo9PABIL8MgzzKLplj4nJlY3NxzeGOdl+atXytj5PDScuEqWRauz6G11WtLQnebOaaFIkEMi4wILpTWGjvyOzzDFJCfPu301PUvJfBwXoUbA314RQ18Vc+124nLVqVv6UYU+E9uXTnf4DVjSEx6n134NFcCgYEAlZgcWUWwXVBv/ytDebnAZNOUCJXh+n70o2yhdZ8PehpMzgf2fEn63c8etBxyEjxo9VPIWpX0Xc06jSbYO32FoqCKgkhueaWtQSRO+sw5D5VxFBBJOKubA19bmPxPuq6kf727BU+CH36TaqerXrW4CZJkqfDSiGX9bKgG87FQflsCgYAiIBYJSDfUq7zc/cUaJmO/Et/ddPkkzKkCxRqvSEGB/ln1FUtNOGRvNnkFuUR6qgorw9crmXqfY4ndAZjhDI3CGg9XmhmnTWCASzMyrMt2809eTtq55omFe0Db4dmtFrdB54A+1KHfKatJbvpdZARLeGXl9J4rMIvh6czvF2NEMwKBgQDyZG4maIHiwxO74MnvOemiLbBl78ixXLuNyZom4aI2sOxe2XpRwLOUihzjPY8FWazxU7CexhD/hH1Pr+NNQT8qjSJGKUBDNRFPbYLJ6XHjseK39F4p+6UAbd415cZ8GVRnUQcDMb6yV8c8mWqSlLAmcsB4Uet8ElcLVwVXF22odw==";
     // final rsaEncryptedFromjs =
-    //     "SU2/A8bxJ+H5dLdgAQPkuSC1KGBQ8Xg5kAWAwf4qbq/cDwPnTTTx6JLMeNBiLpGfw1EBshoDCuMLZ4GAJW93BWVWEtW/gzVxc1hP77+8vc+y3EJ1BjiLOV0MUYllMeDWjApKqPDKG4lBdrGpnkwRusHtvjE4oDpejJ4S5x57CqZIszSeyFxTTTGSUkdnkX2ow9JKApodbz2+LvLKTIOS+zGYKWAo9MfQ8+/zXnkNhRObbsoLky/I1ezWIhk2gtzVmxN0ozbXjrM7vAVZmb4lwIQogxrlq2DKpHP2X8AW4dOJ+jGdyKKVZ9H5Fjc+MMrueJ8Y09DxqRp3AprMuaQ0UgYiBmad5i5UaMOVSFeXnSrqA+vUDzc3mIQPy6RuY2Q5ouOTr6LtOpUmHwOfEeFEnB4r5vdVuWeDsaiJfIiwOyPUKZaYks7Nf3rsqLGJsHDq9yntMCL3ZmhS0Yzbg2l9TTSNjgs89BlDPJE8lKvK5uZkOScbKN53wVppYROy6NfT3RpwqtZjUrQc8w8WzoAJLiJOg4ajyrcbNyQZN/J9hyRhilB/W2uS4vfzAV6QJPd955+RimMvCpANhNjoDtV1Ksy5zlCZrU497YRBbx3ZxDVevL5PNH3hGzZWbcLxyRhFEOCGyskkhEO5uIPK/248JBbUYQ5JJyaKOAeORayAHR8=";
+    //     "ugpI/vwTw+5XN2VqZ1+VZCO31qJbg1s7mtsijoOH2TOyfpPUi+gD4Lc8543OHPSqyZB2D+WpOWOlVF+IWAoErNAwdHFGksBZdR3GymaF0oG6e2vjRh6dw/awI9GKlruCKrtYbqBrbpAS0Cufyp1Puo/uLSxSM5IM2zqtEWYOazTxWFRLn00FBuR1DPslXb1R2LErVhGLRYse2uHbs0kL8EhgRRDqU/4hYo9Yfw3W537l+Rv7SAEjVq3JDkydkW1QYehjG8B8cOZCTEXFCHljQGM0CZzZckf9nifxvMQfCaHA6A0ErJBIel2o7tZFVwW7jC3FnmoGIy5wYGSd0uWBlQ==";
 
     final rsaEncrypted =
         await rsaEncrypt(publicKey, Utf8Encoder().convert(originalText));

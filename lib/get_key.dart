@@ -19,14 +19,7 @@ Future<String> getMasterKey(String email, String password) async {
   return base64Encode(newSecretKeyBytes);
 }
 
-class EncryptionKeys {
-  final String encryptionKey;
-  final String encryptionMac;
-
-  EncryptionKeys(this.encryptionKey, this.encryptionMac);
-}
-
-Future<EncryptionKeys> getEncryptionKeys(String master_key) async {
+Future<String> getEncryptionKeys(String master_key) async {
   final algorithm = Hkdf(
     hmac: Hmac(Sha256()),
     outputLength: 32,
@@ -38,13 +31,15 @@ Future<EncryptionKeys> getEncryptionKeys(String master_key) async {
     nonce: nonce,
     info: Utf8Encoder().convert("enc"),
   );
-  final encryptionKey_base64 = base64Encode(await encryptionKey.extractBytes());
+  // final encryptionKey_base64 = base64Encode(await encryptionKey.extractBytes());
   final encryptionMac = await algorithm.deriveKey(
     secretKey: secretKey,
     nonce: nonce,
     info: Utf8Encoder().convert("mac"),
   );
-  final encryptionMac_base64 = base64Encode(await encryptionMac.extractBytes());
-
-  return EncryptionKeys(encryptionKey_base64, encryptionMac_base64);
+  // final encryptionMac_base64 = base64Encode(await encryptionMac.extractBytes());
+  List<int> buf = [];
+  buf.addAll(await encryptionKey.extractBytes());
+  buf.addAll(await encryptionMac.extractBytes());
+  return base64Encode(buf);
 }
