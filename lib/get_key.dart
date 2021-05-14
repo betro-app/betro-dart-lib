@@ -25,18 +25,18 @@ Future<String> getEncryptionKeys(String master_key) async {
     outputLength: 32,
   );
   final secretKey = SecretKey(base64Decode(master_key));
-  final nonce = Utf8Encoder().convert("sign");
+  final nonce = Utf8Encoder().convert('sign');
   final encryptionKey = await algorithm.deriveKey(
     secretKey: secretKey,
     nonce: nonce,
-    info: Utf8Encoder().convert("enc"),
+    info: Utf8Encoder().convert('enc'),
   );
   final encryptionMac = await algorithm.deriveKey(
     secretKey: secretKey,
     nonce: nonce,
-    info: Utf8Encoder().convert("mac"),
+    info: Utf8Encoder().convert('mac'),
   );
-  List<int> buf = [];
+  final buf = <int>[];
   buf.addAll(await encryptionKey.extractBytes());
   buf.addAll(await encryptionMac.extractBytes());
   return base64Encode(buf);

@@ -8,7 +8,7 @@ String generateSymKey() {
   var random = Random.secure();
   var values = List<int>.generate(32, (i) => random.nextInt(256));
   var mac = List<int>.generate(32, (i) => random.nextInt(256));
-  List<int> buf = [];
+  final buf = <int>[];
   buf.addAll(values);
   buf.addAll(mac);
   return base64Encode(buf);
@@ -17,7 +17,7 @@ String generateSymKey() {
 Future<String> symEncrypt(String sym_key, List<int> data) async {
   final buf = base64Decode(sym_key);
   final keyBuffer = buf.sublist(0, 32);
-  final key = new Key(keyBuffer);
+  final key = Key(keyBuffer);
   final iv = IV.fromLength(16);
   final encrypter = Encrypter(
     AES(
@@ -28,14 +28,14 @@ Future<String> symEncrypt(String sym_key, List<int> data) async {
   final encrypted = encrypter.encryptBytes(data, iv: iv);
   final encryptedData = encrypted.bytes;
   final ivBytes = iv.bytes;
-  final List<int> message = ivBytes + encryptedData;
+  final message = ivBytes + encryptedData;
   final hmac = Hmac.sha256();
   final mac = await hmac.calculateMac(
     message,
     secretKey: SecretKey(buf.sublist(32)),
   );
   final macBytes = mac.bytes;
-  final List<int> encryptedMsg = macBytes + ivBytes + encryptedData;
+  final encryptedMsg = macBytes + ivBytes + encryptedData;
   return base64Encode(encryptedMsg);
 }
 
@@ -59,7 +59,7 @@ Future<List<int>> symDecrypt(String sym_key, String encrypted) async {
     return [];
   }
   final keyBuffer = buf.sublist(0, 32);
-  final key = new Key(keyBuffer);
+  final key = Key(keyBuffer);
   final encrypter = Encrypter(
     AES(
       key,

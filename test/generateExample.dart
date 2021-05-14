@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 import 'example.dart';
 
-const originalText = "Hello";
+const originalText = 'Hello';
 
 void main() async {
-  const email = "user2@example.com";
-  const password = "123456";
+  const email = 'user2@example.com';
+  const password = '123456';
   final masterKey = await getMasterKey(email, password);
   final encryptionKey = await getEncryptionKeys(masterKey);
   final masterHash = await getMasterHash(masterKey, password);
 
-  final symKey = await generateSymKey();
+  final symKey = generateSymKey();
   final encryptedSymKey = await symEncrypt(encryptionKey, base64Decode(symKey));
   final encryptedSymMessage =
       await symEncrypt(symKey, Utf8Encoder().convert(originalText));
@@ -37,7 +37,7 @@ void main() async {
   final ecdhEncryptedSymKey =
       await symEncrypt(encryptionKey, base64Decode(ecdhDerivedKey));
 
-  final example = new Example();
+  final example = Example();
   example.email = email;
   example.password = password;
   example.masterKey = masterKey;
@@ -51,17 +51,18 @@ void main() async {
   example.ecdh.ecdhDerivedKeyMessage = ecdhDerivedKeyMessage;
   example.ecdh.ecdhEncryptedSymKey = ecdhEncryptedSymKey;
   example.ecdh.keys.add(
-    new ExampleEcdhKey(
+    ExampleEcdhKey(
       publicKey: ecdhPair1.publicKey,
       encryptedPrivateKey: encryptedEcdhPrivateKey1,
     ),
   );
   example.ecdh.keys.add(
-    new ExampleEcdhKey(
+    ExampleEcdhKey(
       publicKey: ecdhPair2.publicKey,
       encryptedPrivateKey: encryptedEcdhPrivateKey2,
     ),
   );
-  var file = new File("test/generateExample.json");
-  file.writeAsString(JsonEncoder.withIndent('  ').convert(example.toJson()));
+  var file = File('test/generateExample.json');
+  await file
+      .writeAsString(JsonEncoder.withIndent('  ').convert(example.toJson()));
 }

@@ -3,8 +3,8 @@ part 'example.g.dart';
 
 @JsonSerializable()
 class ExampleSym {
-  String encryptedSymKey = "";
-  String encryptedSymMessage = "";
+  String encryptedSymKey = '';
+  String encryptedSymMessage = '';
   ExampleSym();
   factory ExampleSym.fromJson(Map<String, dynamic> json) =>
       _$ExampleSymFromJson(json);
@@ -13,9 +13,9 @@ class ExampleSym {
 
 @JsonSerializable()
 class ExampleRsa {
-  String publicKey = "";
-  String encryptedPrivateKey = "";
-  String encryptedRsaMessage = "";
+  String publicKey = '';
+  String encryptedPrivateKey = '';
+  String encryptedRsaMessage = '';
   ExampleRsa();
 
   factory ExampleRsa.fromJson(Map<String, dynamic> json) =>
@@ -25,9 +25,9 @@ class ExampleRsa {
 
 @JsonSerializable()
 class ExampleEcdhKey {
-  String publicKey = "";
-  String encryptedPrivateKey = "";
-  ExampleEcdhKey({this.publicKey = "", this.encryptedPrivateKey = ""});
+  String publicKey = '';
+  String encryptedPrivateKey = '';
+  ExampleEcdhKey({this.publicKey = '', this.encryptedPrivateKey = ''});
 
   factory ExampleEcdhKey.fromJson(Map<String, dynamic> json) =>
       _$ExampleEcdhKeyFromJson(json);
@@ -36,8 +36,8 @@ class ExampleEcdhKey {
 
 @JsonSerializable()
 class ExampleEcdh {
-  String ecdhDerivedKeyMessage = "";
-  String ecdhEncryptedSymKey = "";
+  String ecdhDerivedKeyMessage = '';
+  String ecdhEncryptedSymKey = '';
   List<ExampleEcdhKey> keys = [];
   ExampleEcdh();
 
@@ -48,14 +48,14 @@ class ExampleEcdh {
 
 @JsonSerializable()
 class Example {
-  String email = "";
-  String password = "";
-  String masterKey = "";
-  String encryptionKey = "";
-  String masterHash = "";
-  ExampleSym sym = new ExampleSym();
-  ExampleRsa rsa = new ExampleRsa();
-  ExampleEcdh ecdh = new ExampleEcdh();
+  String email = '';
+  String password = '';
+  String masterKey = '';
+  String encryptionKey = '';
+  String masterHash = '';
+  ExampleSym sym = ExampleSym();
+  ExampleRsa rsa = ExampleRsa();
+  ExampleEcdh ecdh = ExampleEcdh();
 
   Example();
   factory Example.fromJson(Map<String, dynamic> json) =>

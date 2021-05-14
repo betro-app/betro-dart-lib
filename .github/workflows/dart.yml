@@ -7,9 +7,9 @@ name: Dart
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -21,8 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Install Flutter 
+
+      - name: Install Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: ${{ matrix.channel }}
@@ -37,6 +37,10 @@ jobs:
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze
+
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Build json
+        run: dart test/generateExample.dart
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
