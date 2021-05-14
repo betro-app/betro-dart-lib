@@ -39,10 +39,10 @@ jobs:
         run: flutter analyze
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
-      # - name: Build json
-      #   run:
-      #     - flutter pub run webcrypto:setup
-      #     - dart test/generateExample.dart
+      - name: Build json
+        run:
+          - flutter pub run webcrypto:setup
+          - dart test/generateExample.dart
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
