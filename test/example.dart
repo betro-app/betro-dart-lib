@@ -37,6 +37,7 @@ class ExampleEcdhKey {
 @JsonSerializable()
 class ExampleEcdh {
   String ecdhDerivedKeyMessage = "";
+  String ecdhEncryptedSymKey = "";
   List<ExampleEcdhKey> keys = [];
   ExampleEcdh();
 

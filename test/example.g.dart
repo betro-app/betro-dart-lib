@@ -33,9 +33,10 @@ Map<String, dynamic> _$ExampleRsaToJson(ExampleRsa instance) =>
     };
 
 ExampleEcdhKey _$ExampleEcdhKeyFromJson(Map<String, dynamic> json) {
-  return ExampleEcdhKey()
-    ..publicKey = json['publicKey'] as String
-    ..encryptedPrivateKey = json['encryptedPrivateKey'] as String;
+  return ExampleEcdhKey(
+    publicKey: json['publicKey'] as String,
+    encryptedPrivateKey: json['encryptedPrivateKey'] as String,
+  );
 }
 
 Map<String, dynamic> _$ExampleEcdhKeyToJson(ExampleEcdhKey instance) =>
@@ -47,6 +48,7 @@ Map<String, dynamic> _$ExampleEcdhKeyToJson(ExampleEcdhKey instance) =>
 ExampleEcdh _$ExampleEcdhFromJson(Map<String, dynamic> json) {
   return ExampleEcdh()
     ..ecdhDerivedKeyMessage = json['ecdhDerivedKeyMessage'] as String
+    ..ecdhEncryptedSymKey = json['ecdhEncryptedSymKey'] as String
     ..keys = (json['keys'] as List<dynamic>)
         .map((e) => ExampleEcdhKey.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -55,6 +57,7 @@ ExampleEcdh _$ExampleEcdhFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ExampleEcdhToJson(ExampleEcdh instance) =>
     <String, dynamic>{
       'ecdhDerivedKeyMessage': instance.ecdhDerivedKeyMessage,
+      'ecdhEncryptedSymKey': instance.ecdhEncryptedSymKey,
       'keys': instance.keys,
     };
 

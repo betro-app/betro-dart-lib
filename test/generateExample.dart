@@ -34,6 +34,8 @@ void main() async {
       await symEncrypt(encryptionKey, base64Decode(ecdhPair1.privateKey));
   final encryptedEcdhPrivateKey2 =
       await symEncrypt(encryptionKey, base64Decode(ecdhPair2.privateKey));
+  final ecdhEncryptedSymKey =
+      await symEncrypt(encryptionKey, base64Decode(ecdhDerivedKey));
 
   final example = new Example();
   example.email = email;
@@ -47,6 +49,7 @@ void main() async {
   example.rsa.encryptedPrivateKey = encryptedRsaPrivateKey;
   example.rsa.encryptedRsaMessage = encryptedRsaMessage;
   example.ecdh.ecdhDerivedKeyMessage = ecdhDerivedKeyMessage;
+  example.ecdh.ecdhEncryptedSymKey = ecdhEncryptedSymKey;
   example.ecdh.keys.add(
     new ExampleEcdhKey(
       publicKey: ecdhPair1.publicKey,
