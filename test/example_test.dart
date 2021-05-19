@@ -40,7 +40,7 @@ void main() {
     expect(Utf8Decoder().convert(decryptedMessage), originalText);
   });
 
-  test("Test ecdh key", () async {
+  test('Test ecdh key', () async {
     final masterKey = await getMasterKey(json.email, json.password);
     final encryptionKey = await getEncryptionKeys(masterKey);
     final decryptedEcdhPrivateKey1 =
