@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:collection/collection.dart';
@@ -39,14 +41,12 @@ Future<String> symEncrypt(String sym_key, List<int> data) async {
   return base64Encode(encryptedMsg);
 }
 
-Future<List<int>> symDecrypt(String sym_key, String encrypted) async {
+Future<List<int>> symDecryptBuffer(Uint8List buf, String encrypted) async {
   final encryptedMsg = base64Decode(encrypted);
   final macBytes = encryptedMsg.sublist(0, 32);
   final message = encryptedMsg.sublist(32);
   final ivBytes = encryptedMsg.sublist(32, 48);
   final encryptedData = encryptedMsg.sublist(48);
-
-  final buf = base64Decode(sym_key);
   final hmac = Hmac.sha256();
   final mac = await hmac.calculateMac(
     message,
@@ -74,3 +74,6 @@ Future<List<int>> symDecrypt(String sym_key, String encrypted) async {
   );
   return decrypted;
 }
+
+Future<List<int>> symDecrypt(String sym_key, String encrypted) =>
+    symDecryptBuffer(base64Decode(sym_key), encrypted);
