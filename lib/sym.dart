@@ -16,7 +16,8 @@ String generateSymKey() {
   return base64Encode(buf);
 }
 
-Future<String> symEncryptBuffer(Uint8List buf, List<int> data) async {
+Future<List<int>> symEncryptBufferToBuffer(
+    Uint8List buf, List<int> data) async {
   final keyBuffer = buf.sublist(0, 32);
   final key = Key(keyBuffer);
   final iv = IV.fromLength(16);
@@ -37,6 +38,11 @@ Future<String> symEncryptBuffer(Uint8List buf, List<int> data) async {
   );
   final macBytes = mac.bytes;
   final encryptedMsg = macBytes + ivBytes + encryptedData;
+  return encryptedMsg;
+}
+
+Future<String> symEncryptBuffer(Uint8List buf, List<int> data) async {
+  final encryptedMsg = await symEncryptBufferToBuffer(buf, data);
   return base64Encode(encryptedMsg);
 }
 
