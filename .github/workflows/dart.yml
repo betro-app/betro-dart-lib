@@ -35,9 +35,6 @@ jobs:
           path: ${{ matrix.flutter_path }}
           key: ${{ matrix.os }}-{{matrix.channel}}-flutter
 
-      - name: Install dependencies
-        run: flutter pub get
-
       - name: Install Flutter
         uses: subosito/flutter-action@v1
         with:
@@ -50,6 +47,9 @@ jobs:
           sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev liblzma-dev libjsoncpp-dev clang
       - name: Enable desktop support
         run: flutter config --enable-${{matrix.TARGET}}-desktop
+
+      - name: Install dependencies
+        run: flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       - name: Verify formatting
