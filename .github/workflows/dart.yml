@@ -34,10 +34,6 @@ jobs:
         with:
           channel: ${{ matrix.channel }}
 
-      - name: Doctor
-        # Run doctor, for ease of debugging any issues.
-        run: flutter doctor -v
-
       - name: Install dependencies
         run: flutter pub get
 
