@@ -1,8 +1,7 @@
 # betro_dart_lib
 
-[![Build Status](https://github.com/prijindal/betro-dart-lib/actions/workflows/dart.yml/badge.svg)](https://github.com/prijindal/betro-dart-lib/actions/workflows/dart.yml)
-[![codecov](https://codecov.io/gh/prijindal/betro-dart-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/prijindal/betro-dart-lib)
-
+[![Build Status](https://github.com/betro-app/betro-dart-lib/actions/workflows/dart.yml/badge.svg)](https://github.com/betro-app/betro-dart-lib/actions/workflows/dart.yml)
+[![codecov](https://codecov.io/gh/betro-app/betro-dart-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/betro-app/betro-dart-lib)
 
 ## Getting Started
 
