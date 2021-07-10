@@ -8,3 +8,4 @@ export 'master_hash.dart';
 export 'ecdh.dart';
 export 'rsa.dart';
 export 'sym.dart';
+export 'ecdsa.dart';

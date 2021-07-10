@@ -100,4 +100,13 @@ void main() {
     final decrypted = await symDecrypt(derivedKey2, encrypted);
     expect(Utf8Decoder().convert(decrypted), originalText);
   });
+
+  test('Ecdsa keys', () async {
+    final ecPair = await generateEcdsaPair();
+    final signature =
+        await signEcdsa(ecPair.privateKey, Utf8Encoder().convert(originalText));
+    final verified = await verifyEcdsa(
+        ecPair.publicKey, Utf8Encoder().convert(originalText), signature);
+    expect(verified, true);
+  });
 }

@@ -1,12 +1,7 @@
 import 'dart:convert';
 import 'package:webcrypto/webcrypto.dart';
 import 'get_key.dart';
-
-class EcPair {
-  final String publicKey;
-  final String privateKey;
-  EcPair(this.publicKey, this.privateKey);
-}
+import 'constants.dart';
 
 Future<EcPair> generateExchangePair() async {
   final keyPair = await EcdhPrivateKey.generateKey(EllipticCurve.p256);
