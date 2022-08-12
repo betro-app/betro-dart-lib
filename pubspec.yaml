@@ -8,18 +8,19 @@ environment:
   flutter: ">=2.0.0"
 
 dependencies:
-  pedantic: ^1.11.1
-  cryptography: ^2.0.2
-  encrypt: ^5.0.0
-  json_annotation: ^4.0.1
-  webcrypto: ^0.5.2
+  lints: ^2.0.0
+  cryptography: ^2.0.5
+  encrypt: ^5.0.1
+  json_annotation: ^4.6.0
+  webcrypto:
+    git: https://github.com/google/webcrypto.dart
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  coverage: "^1.0.2"
-  build_runner: ^2.0.6
-  json_serializable: ^4.1.4
+  coverage: "^1.5.0"
+  build_runner: ^2.2.0
+  json_serializable: ^6.3.1
   flutter_test:
     sdk: flutter
 

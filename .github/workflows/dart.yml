@@ -45,8 +45,8 @@ jobs:
       - name: Analyze project source
         run: flutter analyze
 
-      - name: Webcrypto hot fix
-        run: grep -rl "pkg\['rootUri'\]" $PUB_CACHE/hosted/pub.dartlang.org/webcrypto-0.5.2/bin/setup.dart | xargs sed -i "s/pkg\['rootUri'\]/pkg['rootUri']\+\"\/\"/g"
+      # - name: Webcrypto hot fix
+      #   run: grep -rl "pkg\['rootUri'\]" $PUB_CACHE/hosted/pub.dartlang.org/webcrypto-0.5.2/bin/setup.dart | xargs sed -i "s/pkg\['rootUri'\]/pkg['rootUri']\+\"\/\"/g"
 
       - run: flutter pub run webcrypto:setup
       - run: dart test/generateExample.dart
