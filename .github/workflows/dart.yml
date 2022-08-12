@@ -21,16 +21,16 @@ jobs:
             TARGET: linux
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Cache Flutter dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ matrix.flutter_path }}
           key: ${{ matrix.os }}-{{matrix.channel}}-flutter
 
       - name: Install Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.channel }}
 
